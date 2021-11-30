@@ -1,13 +1,13 @@
 def rev_n_0b(to_rev):
     return "0b" + to_rev[::-1]
 
+
 def covert_line(str_in):
-    str_out = ""
-    if len(str_in) == 16:
-        l_out = rev_n_0b(str_in[0:8])
-        r_out = rev_n_0b(str_in[8:16])
-        line_out = l_out + ", " + r_out + ", "
-        line_out += "// " + str_in.replace("0"," ").replace("1","#")
+    line_out = ""
+    if len(str_in) % 8 == 0:
+        for i in range(int(len(str_in) / 8)):
+            line_out += rev_n_0b(str_in[i * 8:i * 8 + 8]) + ", "
+        line_out += "// " + str_in.replace("0", " ").replace("1", "#")
     return line_out
 
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         lines = [line.rstrip() for line in lines]
 
     f = open('output.xbm', 'w')
-    f.write("#define icon_width 16\n")
+    f.write("#define icon_width {}\n".format(len(lines[0])))
     f.write("#define icon_height {}\n".format(len(lines)))
     f.write("static unsigned char icon_bits[] = {\n")
     for line in lines:
